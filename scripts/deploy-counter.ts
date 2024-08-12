@@ -17,20 +17,20 @@ async function main() {
     `Counter deployed to ${counter.target}`
   );
 
-  const tx1 = await counter.set(10);
-  const rsp1 = await tx1.wait();
-  fs.appendFileSync(logPath, JSON.stringify(rsp1) + "\n");
-  console.log(rsp1)
+  // const tx1 = await counter.set(10);
+  // const rsp1 = await tx1.wait();
+  // fs.appendFileSync(logPath, JSON.stringify(rsp1) + "\n");
+  // console.log(rsp1)
 
-  const tx2 = await counter.increment();
-  const rsp2 = await tx2.wait();
-  fs.appendFileSync(logPath, JSON.stringify(rsp2) + "\n");
-  console.log(rsp2);
+  // const tx2 = await counter.increment();
+  // const rsp2 = await tx2.wait();
+  // fs.appendFileSync(logPath, JSON.stringify(rsp2) + "\n");
+  // console.log(rsp2);
 
-  const tx3 = await counter.emitEvent(10000, deployer.address, "Hello World");
-  const rsp3 = await tx3.wait();
-  fs.appendFileSync(logPath, JSON.stringify(rsp3) + "\n");
-  console.log(rsp3);
+  // const tx3 = await counter.emitEvent(10000, deployer.address, "Hello World");
+  // const rsp3 = await tx3.wait();
+  // fs.appendFileSync(logPath, JSON.stringify(rsp3) + "\n");
+  // console.log(rsp3);
   fs.writeFileSync(logPath, "-----------end------------\n");
 }
 

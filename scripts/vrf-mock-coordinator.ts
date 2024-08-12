@@ -8,14 +8,15 @@ if (!fs.existsSync(logPath)) {
 }
 
 async function main() {
+  const privateKey = "YOUR_PRIVATE_KEY";
+  const wallet = new ethers.Wallet(privateKey);
+  const signer = wallet.connect(ethers.provider);
   const [buildbear, user] = await ethers.getSigners();
   console.log({ buildbear: buildbear.address, user: user.address });
 
-  // const mainnetVRFCoordinatorAddr =
-  //   "0xd7f86b4b8cae7d942340ff628f82735b7a20893a";
-  // const mainnetVRFCoordinatorAddr =
-  //   "0x7541acB3b4aB0f68a4E6e3632922dCE9850ac027";
-  // console.log({ mainnetVRFCoordinatorAddr });
+  const mainnetVRFCoordinatorAddr =
+    "0xd7f86b4b8cae7d942340ff628f82735b7a20893a";
+  console.log({ mainnetVRFCoordinatorAddr });
   // const mainnetVRFCode = await ethers.provider.send("eth_getCode", [
   //   mainnetVRFCoordinatorAddr,
   //   "latest",
@@ -23,32 +24,32 @@ async function main() {
   // console.log({ mainnetVRFCoordinatorAddr, mainnetVRFCode });
 
   // Deploy coordinator
-  console.log("Deploying Mock Coordinator...");
-  const coordinatorMock = await ethers.deployContract(
-    "VRFCoordinatorV2_5Mock",
-    [
-      BigInt("100000000000000000"),
-      BigInt("1000000000"),
-      BigInt("4104360000000000"),
-    ],
-    buildbear
-  );
+  // console.log("Deploying Mock Coordinator...");
+  // const coordinatorMock = await ethers.deployContract(
+  //   "VRFCoordinatorV2_5Mock",
+  //   [
+  //     BigInt("100000000000000000"),
+  //     BigInt("1000000000"),
+  //     BigInt("4104360000000000"),
+  //   ],
+  //   buildbear
+  // );
 
-  await coordinatorMock.waitForDeployment();
-  const mainnetVRFCoordinatorAddr = coordinatorMock.target;
+  // await coordinatorMock.waitForDeployment();
+  // const mainnetVRFCoordinatorAddr = coordinatorMock.target;
 
-  console.log(`VRF Coordinator Mock deployed to ${coordinatorMock.target}`);
+  // console.log(`VRF Coordinator Mock deployed to ${coordinatorMock.target}`);
 
-  console.log("Updating the mainnet coordinator code to the mock code...");
-  const mockCode = await ethers.provider.send("eth_getCode", [
-    coordinatorMock.target,
-    "latest",
-  ]);
-  fs.writeFileSync(logPath, JSON.stringify(mockCode) + "\n");
-  await ethers.provider.send("hardhat_setCode", [
-    mainnetVRFCoordinatorAddr,
-    VRF_MOCK_BYTECODE,
-  ]);
+  // console.log("Updating the mainnet coordinator code to the mock code...");
+  // const mockCode = await ethers.provider.send("eth_getCode", [
+  //   coordinatorMock.target,
+  //   "latest",
+  // ]);
+  // fs.writeFileSync(logPath, JSON.stringify(mockCode) + "\n");
+  // await ethers.provider.send("hardhat_setCode", [
+  //   mainnetVRFCoordinatorAddr,
+  //   VRF_MOCK_BYTECODE,
+  // ]);
   // const updatedVRFCode = await ethers.provider.send("eth_getCode", [
   //   mainnetVRFCoordinatorAddr,
   //   "latest",
@@ -65,23 +66,24 @@ async function main() {
   // );
 
   // Create subscription
-  console.log("[Coordinator] Creating subscription...");
-  const subsTx = await updatedCoordinator.connect(user).createSubscription();
-  const subRecipt = await subsTx.wait();
-  // @ts-ignore
-  const args = subRecipt?.logs[0]?.args;
-  const subId = args[0];
+  // console.log("[Coordinator] Creating subscription...");
+  // const subsTx = await updatedCoordinator.connect(user).createSubscription();
+  // const subRecipt = await subsTx.wait();
+  // // @ts-ignore
+  // const args = subRecipt?.logs[0]?.args;
+  // const subId = args[0];
+  const subId = "20342667800601792528536539555806318142439575802735528341264238284279717765858"
   console.log({ subId });
 
   // Fund subscription
-  const linkAmount = "99999999999999999999";
-  console.log(
-    `[Coordinator] Funding subscription with ${linkAmount} Mock LINK...`
-  );
-  const fundSubTx = await updatedCoordinator
-    .connect(user)
-    .fundSubscription(subId, BigInt(linkAmount));
-  await fundSubTx.wait();
+  // const linkAmount = "99999999999999999999";
+  // console.log(
+  //   `[Coordinator] Funding subscription with ${linkAmount} Mock LINK...`
+  // );
+  // const fundSubTx = await updatedCoordinator
+  //   .connect(user)
+  //   .fundSubscription(subId, BigInt(linkAmount));
+  // await fundSubTx.wait();
 
   // Deploy consumer
   console.log("Deploying consumer...");
